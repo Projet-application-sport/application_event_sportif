@@ -29,23 +29,19 @@
                         </li>
                     </ul>
                 </div>
-                <form method= "post" action = "matchs.py" id="myform">
+                <form method= "post" action="{{ url_for('liste_event')}}" id="myform">
                     <fieldset id="section2">
-                        <label for="Match1" required='required'>Match</label>
-                        <select size="1">
-                            <Option value="Match1">Match 1</Option>
-                            <Option value="Match2"></Option>
-                            <Option value="Match3"></Option>
-                            <Option value="Match4"></Option>
-                            <Option value="Match5"></Option>
-                            <Option value="Match6"></Option>
-                            <Option value="Match7"></Option>
-                            <Option value="Match8"></Option>
-                        </select><br><br><!--Pré remplir grâce à python-->
-                    </fieldset>
-                        <a href="Modifier.html"><input class="button" type="submit" value="Modifier"></a>
+                        <label for="Matchs" required='required'>Match</label>
+                            <select name="event_select" >
+                                {% for each in list_tested %}
+                                  <option value="{{each}}">{{each}}</option>
+                                {% endfor %}
+                                </select>
+                        </label>
+                    </fieldset> 
+                        <a href="{{ url_for('liste_event')}}"><input class="button" type="submit" value="Modifier"></a>
                         <input class="button" type="submit" value="Consulter"/>
-                </form>
+                <!--</form>-->
 
             <footer>
                 <p><a href="mailto: footevent@footevent.com">Nous contacter</a></p>

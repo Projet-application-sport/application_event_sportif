@@ -29,17 +29,17 @@
                         </li>
                     </ul>
                 </div>
-                <form method= "post" action = "inscription_formulaire.py" id="myform">
+                <form method= "post" action = "{{ url_for('create_event')}}" id="myform">
                     <!--Création du formulaire d'organisation de match-->
                     <!--Voir comment créer un formulaire pour montrer les possibilités de terrains/adresses-->
                     <fieldset id="section2">
                         <legend>Détails de la rencontre</legend>
-                        <label for="Event_name" required='required'>Intitulé de la rencontre</label>
-                        <input type="text" id="Event_name" placeholder="ex: Le Classico"><br><br>
-                        <label for="Date_de_rencontre" required='required'>Date de la rencontre</label>
-                        <input type = "date" id="Date_de_rencontre"><br><br>
+                        <label for="Event_name"   required='required'>Intitulé de la rencontre</label>
+                        <input type="text" id="Event_name" name="nom_event" placeholder="ex: Le Classico"><br><br>
+                        <label for="Date_de_rencontre"  required='required'>Date de la rencontre</label>
+                        <input type = "date" name="date_event" id="Date_de_rencontre"><br><br>
                         <label for="Heure" required='required'>Heure</label>
-                        <input type="time" id="Heure"><br><br>
+                        <input type="time" name="heure_event" id="Heure"><br><br>
                         <!--<label for="friend" required="required">Ajouter des participants</label>
                         <input id="add" type ="submit" value = "+"><br><br>Ajouter cette fonctionnalité au bouton de création de l'event-->
                         <label>Choix du département du terrain:
@@ -54,16 +54,15 @@
                                 <Option value="Département8">Val d'Oise (95)</Option>
                             </select>
                         </label><br><br>
+                        <input id="add" type ="submit" value = "+"><br><br><!--Ajouter cette fonctionnalité au bouton de création de l'event-->
                         <label>Choix du terrain:
-                            <select size="3">
-                                <Option value="Stade 1">Stade 1</Option>
-                                <Option value="Stade 2">Stade 2</Option>
-                                <Option value="Stade 3">Stade 3</Option>
-                                <Option value="Stade 4">Stade 4</Option>
-                                <Option value="Stade 5">Stade 5</Option>
-                                <Option value="Stade 5">Stade 6</Option>
-                            </select>
+                            <select name="event_select" >
+                                {% for each in list_tested %}
+                                  <option value="{{each}}">{{each}}</option>
+                                {% endfor %}
+                                </select>
                         </label>
+
                     </fieldset>
                     <div id="carrousel">
                             <!--Création du carrousel permettant de faire défiler les photos des terrains-->

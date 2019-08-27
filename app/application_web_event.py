@@ -14,6 +14,9 @@ import os
 import cgi
 import cgitb; cgitb.enable()
 import json
+import datetime
+import datetime 
+#import datetime, date, time
 
 
 
@@ -112,7 +115,7 @@ def page_principale():
 
 @app.route('/page_organiser_un_match')
 def page_organiser_un_match():
-    return render_template('Organiser_un_match.html')
+    return redirect('/create_event')
 
 
 @app.route('/page_global_matchs')
@@ -121,7 +124,11 @@ def page_global_matchs():
 
 @app.route('/page_mes_matchs')
 def page_mes_matchs():
-    return render_template('Mes_matchs.html')
+    return redirect('/liste_event')
+
+@app.route('/page_consulter')
+def page_consulter():
+    return redirect('/consulter_event')
 
 
 @app.route('/page_liste_groupes')
@@ -144,16 +151,6 @@ def page_profil():
 @app.route('/page_invitation_match')
 def page_invitation_match():
     return render_template('Invitation_match.html')
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -396,7 +393,7 @@ def create_event():
         list_tested = [i for sub in resultat_req_stades for i in sub]  
 
         # On affiche la page html avec la liste des stades en paramètre
-        return render_template('creation_event.html', list_tested=list_tested)
+        return render_template('Organiser_un_match.html', list_tested=list_tested)
 
      # Si on souhaite envoyer des paramètres 
     if request.method == "POST": 
@@ -414,16 +411,98 @@ def create_event():
         cursor.execute(req_id_stade % select_stade)
         # On récupère toutes les lignes du résultat de la requête
         result_id_stade = cursor.fetchall()
-        resultat = str(result_id_stade)
+        #resultat = str(result_id_stade)
 
         # On insère les information saisies dans la TABLE events
         req_enregister_event = "INSERT INTO events (name_ev, date_ev, hour_ev, id_stadeA) VALUES (%s,%s,%s,%s)"
         # On exécute la requête SQL
-        cursor.execute(req_enregister_event, (name, date, time, resultat))
+        cursor.execute(req_enregister_event, (name, date, time, result_id_stade))
         # On sauvegarde les informations
         connection.commit()
         # On réactualise la page lorsuqu'on valide l'événement
         return redirect('/create_event')
+    
+@app.route("/liste_event", methods=["GET", "POST"])
+def liste_event():
+
+    # Si on souhaite récupérer la page web
+    if request.method == "GET":
+
+        req_stade = "SELECT name_ev FROM events"
+        # On exécute la requête SQL
+        cursor.execute(req_stade)
+        # On récupère toutes les lignes du résultat de la requête
+        resultat_req_stades = cursor.fetchall()
+        # On Convertit le résultat en une liste 
+        list_tested = [i for sub in resultat_req_stades for i in sub]
+    
+        return render_template('Mes_matchs.html', list_tested=list_tested)
+        
+    if request.method == "POST":
+
+        # On récupère les informations saisies par l'utilisateur
+        select_event = request.form.get('event_select')
+    
+        # On stocke l'email dans une session afin de l'utiliser dans la route /reset_mdp
+        
+        #session['messages'] = select_event
+
+        req_date_consulter_event  = "SELECT date_ev FROM events WHERE name_ev = '%s' "
+         # On exécute la requête SQL
+        cursor.execute(req_date_consulter_event % select_event)
+        date  = cursor.fetchall()
+        datee = str(date)
+        dateee = datee[16:27]
+        date_event= dateee.replace(",", "/")
+
+        req_date_consulter_event  = "SELECT hour_ev FROM events WHERE name_ev = '%s' "
+         # On exécute la requête SQL
+        cursor.execute(req_date_consulter_event % select_event)
+        heure  = cursor.fetchall()
+        heuree = str(heure)
+        heureee = heuree[29:34]
+        heure_event = str(datetime.timedelta(seconds=int(heureee)))
+
+    
+        
+        
+        
+        
+        #timestampStr = date.strftime("%d-%b-%Y (%H:%M:%S)")
+        #date_event = datetime.strptime(str(date), "%Y-%d-%m").strftime("%d/%m/%Y")
+ 
+
+        #liste_date = [i for sub in date_event for i in sub]
+        # On affiche la page html avec la liste des stades en paramètre
+        return redirect(url_for('consulter_event', select_event=select_event, date = date_event, heure = heure_event))
+
+@app.route("/consulter_event", methods=["GET", "POST"])
+def consulter_event():
+
+    # Si on souhaite récupérer la page web
+    if request.method == "GET":
+    
+        messages = request.args['select_event']
+        #messages = session['messages']  
+        dates = request.args['date']
+        heures = request.args['heure']
+
+        # req_date_consulter_event  = "SELECT id_event FROM events WHERE name_ev = '%s' "
+        #  # On exécute la requête SQL
+        # cursor.execute(req_date_consulter_event % messages)
+        #  # On récupère toutes les lignes du résultat de la requête
+        # #resultat_req_date_consulter_event = cursor.fetchall()
+        #  # on convertit la requete sql en liste
+        # #liste_req = list(resultat_req_consulter_event)
+        # datee = cursor.execute(req_date_consulter_event % messages)
+
+        #timestampStr = datee.strftime('%m/%d/%Y')
+        
+
+        # On affiche la page html avec la liste des stades en paramètre
+        return render_template('Modifier.html', nom_event = messages, date=dates, heure=heures)
+
+
 
 
 
