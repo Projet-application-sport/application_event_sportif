@@ -1,4 +1,4 @@
-def test_root_path():
+def test_root_path(client):
     reponse = client.get('/', data=None, headers=None)
     # a = 1
     # b = 0
