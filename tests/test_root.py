@@ -7,6 +7,6 @@ def test_root_path(client):
     # assert a == b
     # assert 1 == 0
 
-    assert reponse.status_code == 200
+    assert reponse.status_code == 500
     # assert reponse.body.content.match(regexp)
 
