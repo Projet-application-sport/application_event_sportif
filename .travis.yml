@@ -1,6 +1,7 @@
 language: python
 
 python:
+<<<<<<< HEAD
         - "3.4"
         - "3.5"
         - "3.6"
@@ -12,3 +13,14 @@ install:
 
 script:
         - pipenv run pytest     
+=======
+  - "3.5"
+  - "3.6"
+  - "3.7"
+
+install:
+  - pipenv install
+
+script:
+  - pipenv run pytest     
+>>>>>>> 71a4520b7fc522fbed88f21f00771b87a2a39b58
