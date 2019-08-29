@@ -21,10 +21,10 @@ import datetime
 
 
 # On créé une conexion MySQL avec le connecteur MySQLdb
-connection = MySQLdb.connect(host='127.0.0.1', port=3306, user='root', passwd='', db='db_application_event_sportif')
+#connection = MySQLdb.connect(host='127.0.0.1', port=3306, user='root', passwd='', db='db_application_event_sportif')
 
 # On créé un curseur MySQL
-cursor = connection.cursor()
+#cursor = connection.cursor()
 
 
 app = Flask(__name__)
@@ -507,5 +507,5 @@ def consulter_event():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', debug=True)
 
