@@ -1,8 +1,13 @@
 services: 
   - docker
 
-install:
-  - make build
- 
 script:
+  - make build
   - make test     
+
+deploy:
+  - provider: script
+    script: make deliver
+    on:
+      branch: master   
+
