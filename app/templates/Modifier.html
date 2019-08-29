@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+    <Html>
+        <!--Front projet devops-->
+        <head>
+        <meta charset=utf-8>
+        <link rel="stylesheet" href="{{ url_for('static', filename='stylesheet_Projet_devops_2019.css') }}">
+        <title>FootEvent - Création d'évènement rencontre football</title>
+        </head>
+        <body>
+            <h1>Modifier un match</h1>
+            <div id="menu">
+                <!--Création du menu. Mis à l'horizontal grâce au CSS. Page d'organisation de match-->
+                    <ul id="onglets">
+                        <li ><a href="{{ url_for('page_principale')}}">Accueil</a></li>
+                        <li class="active"><a href="{{ url_for('page_global_matchs')}}">Matchs ▼</a>
+                            <ul>
+                                <li><a href="{{ url_for('page_mes_matchs')}}">Mes matchs</a></li>
+                                <li class="active"><a href="{{ url_for('page_organiser_un_match')}}">Création</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="{{ url_for('page_liste_groupes')}}">Mes groupes</a></li>
+                        <li><a href="{{ url_for('page_liste_amis')}}">Mes amis</a></li>
+                        <li><a href="{{ url_for('page_notifications')}}">Mes notifications</a></li>
+                        <li><a href="{{ url_for('page_profil')}}">Mon profil ▼</a>
+                            <ul>
+                                <li><a href="{{ url_for('page_profil')}}">Configuration</a></li>
+                                <li><a href="{{ url_for('sign_out')}}">Déconnexion</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <form method= "post" action = "{{ url_for('liste_event')}}" id="myform">
+                    <fieldset id="section2">
+                        <legend>Détails de la rencontre</legend>
+                        <label for="Event_name" required='required'>Intitulé de la rencontre</label>
+                        <input type="text" name="{{ nom_event }}" value="{{ nom_event }}" id="Event_name" ><br><br>
+                        <label for="Date_de_rencontre" >Date de la rencontre</label>
+                        <input type = "text" name="{{ date }}" value="{{ date }}"id="Date_de_rencontre" ><br><br>
+                        <label for="Heure" >Heure</label>
+                        <input type="text" name="{{ heure }}" value="{{ heure }}" id="Heure" ><br><br>
+                        <label for="Departement_id">Choix du département du terrain</label>
+                        <input type="text" id="Departement_id" ><br><br>
+                        <label for="Terrain">Choix du terrain</label>
+                        <input type="text" name="terrain" id="Terrain" ><br><br>
+                        <label for="friend" required="required">Ajouter des participants</label>
+                        <input id="friend" type ="submit" value = "+"><br><br>
+                        <label for="friend" >Supprimer des participants</label>
+                        <input id="friend" type ="submit" value = "-"><br><br>
+                    </fieldset>
+                    <input class="button" type ="submit" value = "Valider"><br>
+                    <input class="buttonsup" type ="submit" value = "Supprimer l'event">
+            <footer>
+                <p><a href="mailto: footevent@footevent.com">Nous contacter</a></p>
+            </footer>
+        </body>
+    </Html>

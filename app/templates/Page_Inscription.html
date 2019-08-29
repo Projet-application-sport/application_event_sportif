@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+    <Html>
+                <!--Front page du formulaire d'inscription pour accéder au site-->
+        <head>
+            <title>Formulaire d'inscription FootEvent</title>
+            <meta charset=utf-8>
+            <link rel="stylesheet" href="{{ url_for('static', filename='stylesheet_Projet_devops_2019.css')}}">
+        </head>
+            <body id=bodypa>
+                <h1>Inscription</h1>
+                <h2 id=soustitre>Remplissez le formulaire afin de pouvoir participer aux activités !</h2><br><br>
+                <!--Fichier python à créer pour récupérer les données-->
+                <form method= "post" action = "{{ url_for('enregistrerclient')}}" id="myform">
+                    <fieldset id="section2"><!--Delimitation des sections du formulaire-->
+                        <legend>Informations</legend>
+                        <label for="Nom" required='required'>Nom</label>
+                        <input type = "text" name="nom" id="Nom" placeholder="ex : Zidane"><br><br>
+                        <label for="Prénom">Prénom</label>
+                        <input type = "text" name="prenom" id="Prénom" required='required' placeholder="ex : Zinedine"><br><br>
+                        <label for="Pseudo">Pseudo</label>
+                        <input type = "text" name="pseudo" id="Pseudo" required='required' placeholder="ex : Z_Zidane"><br><br>
+                        <label for="Adresse_email">Adresse email</label>
+                        <input type = "email" name="e_mail" id="Adresse_email" required='required' placeholder="ex : zinedine_zidane@zz.com"><br><br>
+                        <label for="Confirmer_adresse_email">Confirmer l'adresse email</label>
+                        <input type = "email" id="Confirmer_adresse_email" required='required'><br><br>
+                        <label for="Mot_de_passe">Mot de passe</label>
+                        <input type = "password" name="mot_de_passe" id="Mot_de_passe" required='required' minlength="8"><br><br>
+                        <label for="Confirmer_mdp">Confirmer le mot de passe</label>
+                        <input type = "password" id="Confirmer_mdp" required='required'><br><br>
+                        <label for="Téléphone">Téléphone</label>
+                        <input type = "tel" name="telephone" id="Téléphone" required='required' placeholder="0606060606" maxlength="10" minlength="10"><br><br>
+                        <label for="Date_de_naissance" required='required'>Date de naissance</label>
+                        <input type = "date" name="date_de_naissance" id="Date_de_naissance"><br><br>
+                    </fieldset>
+                    <fieldset id="section3">
+                        <legend>Notifications</legend>
+                        <INPUT type="checkbox" name="choix1" value="1" checked>Via le site<br>
+                        <INPUT type="checkbox" name="choix2" value="2">Par mail<br>
+                        <INPUT type="checkbox" name="choix3" value="3">Par téléphone<br>
+                    </fieldset>
+                <!--Trouver comment récupérer les données cochées-->
+                    <input class="bouton" type ="submit" value = "Envoyer">
+                </form>
+                <footer>
+                        <p><a href="mailto: footevent@eventfoot.com">Nous contacter</a></p>  <!--Adresse mail à créer-->
+                </footer>
+                <script type="text/javascript" src="{{ url_for('static', filename='formulaire.js')}}"></script>
+            </body>
+    </Html>
+        

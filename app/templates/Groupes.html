@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+    <Html>
+        <!--Front projet devops-->
+        <head>
+        <meta charset=utf-8>
+        <link rel="stylesheet" href="{{ url_for('static', filename='stylesheet_Projet_devops_2019.css') }}">
+        <title>FootEvent - Création d'évènement rencontre football</title>
+        </head>
+        <body>
+            <h1>Mes groupes</h1>
+            <div id="menu">
+                    <!--Création du menu. Mis à l'horizontal grâce au CSS-->
+                <ul id="onglets">
+                    <li ><a href="{{ url_for('page_principale')}}">Accueil</a></li>
+                    <li><a href="{{ url_for('page_global_matchs')}}">Matchs ▼</a>
+                        <ul>
+                            <li><a href="{{ url_for('page_mes_matchs')}}">Mes matchs</a></li>
+                            <li><a href="{{ url_for('page_organiser_un_match')}}">Création</a></li>
+                        </ul>
+                    </li>
+                    <li  class="active"><a href="{{ url_for('page_liste_groupes')}}">Mes groupes</a></li>
+                    <li><a href="{{ url_for('page_liste_amis')}}">Mes amis</a></li>
+                    <li><a href="{{ url_for('page_notifications')}}">Mes notifications</a></li>
+                    <li><a href="{{ url_for('page_profil')}}">Mon profil ▼</a>
+                        <ul>
+                            <li><a href="{{ url_for('page_profil')}}">Configuration</a></li>
+                            <li><a href="{{ url_for('sign_out')}}">Déconnexion</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <!--Ici j'essaye de sectionner la page en plusieurs zone pour afficher le contenu de façon plus jolie-->
+
+            <footer>
+                <p><a href="mailto: footevent@footevent.com">Nous contacter</a></p>
+            </footer>
+        </body>
+    </Html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+    <Html>
+        <!--Front projet devops-->
+        <head>
+        <meta charset=utf-8>
+        <link rel="stylesheet" href="{{ url_for('static', filename='stylesheet_Projet_devops_2019.css') }}">
+        <title>FootEvent - Création d'évènement rencontre football</title>
+        </head>
+        <body>
+            <h1>Organiser un match</h1>
+            <div id="menu">
+                <!--Création du menu. Mis à l'horizontal grâce au CSS. Page d'organisation de match-->
+                    <ul id="onglets">
+                        <li ><a href="{{ url_for('page_principale')}}">Accueil</a></li>
+                        <li class="active"><a href="{{ url_for('page_global_matchs')}}">Matchs ▼</a>
+                            <ul>
+                                <li><a href="{{ url_for('page_mes_matchs')}}">Mes matchs</a></li>
+                                <li class="active"><a href="{{ url_for('page_organiser_un_match')}}">Création</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="{{ url_for('page_liste_groupes')}}">Mes groupes</a></li>
+                        <li><a href="{{ url_for('page_liste_amis')}}">Mes amis</a></li>
+                        <li><a href="{{ url_for('page_notifications')}}">Mes notifications</a></li>
+                        <li><a href="{{ url_for('page_profil')}}">Mon profil ▼</a>
+                            <ul>
+                                <li><a href="{{ url_for('page_profil')}}">Configuration</a></li>
+                                <li><a href="{{ url_for('sign_out')}}">Déconnexion</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <form method= "post" action = "{{ url_for('create_event')}}" id="myform">
+                    <!--Création du formulaire d'organisation de match-->
+                    <!--Voir comment créer un formulaire pour montrer les possibilités de terrains/adresses-->
+                    <fieldset id="section2">
+                        <legend>Détails de la rencontre</legend>
+                        <label for="Event_name"   required='required'>Intitulé de la rencontre</label>
+                        <input type="text" id="Event_name" name="nom_event" placeholder="ex: Le Classico"><br><br>
+                        <label for="Date_de_rencontre"  required='required'>Date de la rencontre</label>
+                        <input type = "date" name="date_event" id="Date_de_rencontre"><br><br>
+                        <label for="Heure" required='required'>Heure</label>
+                        <input type="time" name="heure_event" id="Heure"><br><br>
+                        <!--<label for="friend" required="required">Ajouter des participants</label>
+                        <input id="add" type ="submit" value = "+"><br><br>Ajouter cette fonctionnalité au bouton de création de l'event-->
+                        <label>Choix du département du terrain:
+                            <select size="3">
+                                <Option value="Département1">Paris (75)</Option>
+                                <Option value="Département2">Seine-et-Marne (77)</Option>
+                                <Option value="Département3">Yvelines (78)</Option>
+                                <Option value="Département4">Essonne (91)</Option>
+                                <Option value="Département5">Hauts-de-Seine (92)</Option>
+                                <Option value="Département6">Seine-Saint-Denis (93)</Option>
+                                <Option value="Département7">Val-de-Marne (94)</Option>
+                                <Option value="Département8">Val d'Oise (95)</Option>
+                            </select>
+                        </label><br><br>
+                        <input id="add" type ="submit" value = "+"><br><br><!--Ajouter cette fonctionnalité au bouton de création de l'event-->
+                        <label>Choix du terrain:
+                            <select name="event_select" >
+                                {% for each in list_tested %}
+                                  <option value="{{each}}">{{each}}</option>
+                                {% endfor %}
+                                </select>
+                        </label>
+
+                    </fieldset>
+                    <div id="carrousel">
+                            <!--Création du carrousel permettant de faire défiler les photos des terrains-->
+                            <ul>
+                                <li><img src=""/></li>
+                                <li><img src=""/></li>
+                                <li><img src=""/></li>
+                                <li><img src=""/></li>
+                                <li><img src=""/></li>
+                                <li><img src=""/></li>
+                                <li><img src=""/></li>
+                            </ul>    
+                        </div>
+                    <input class="button" type ="submit" value = "Valider l'event">
+            <footer>
+                <p><a href="mailto: footevent@footevent.com">Nous contacter</a></p>
+            </footer>
+        </body>
+    </Html>
