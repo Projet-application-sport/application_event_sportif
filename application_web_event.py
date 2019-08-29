@@ -146,7 +146,8 @@ def page_notifications():
 
 @app.route('/page_profil')
 def page_profil():
-    return render_template('Page_profil.html')
+     return redirect('/configuration')
+   
 
 @app.route('/page_invitation_match')
 def page_invitation_match():
@@ -240,6 +241,7 @@ def se_connecter():
         # sinon on se connecter avec succes
         else:
             session['connection_user'] = True
+            session['pseudo_user'] = e_mail
             flash('You were successfully logged in')
             #session["e_mail"] = request.form["e_mail"]
             #return redirect(url_for('mes_informations'))
@@ -501,6 +503,23 @@ def consulter_event():
 
         # On affiche la page html avec la liste des stades en paramètre
         return render_template('Modifier.html', nom_event = messages, date=dates, heure=heures)
+
+@app.route("/configuration", methods=["GET", "POST"])
+def configuration():
+
+    if request.method == "GET":
+
+        mail = session.get('pseudo_user')
+        if mail:
+
+            req_date_consulter_event  = "SELECT pseudo FROM users WHERE email = '%s' " # On exécute la requête SQL
+            cursor.execute(req_date_consulter_event % mail)
+            date  = cursor.fetchall()
+            list_tested = [i for sub in date for i in sub]
+            date = str(list_tested)
+
+            return render_template('Page_profil.html', pseudo = date, mail=mail)
+
 
 
 

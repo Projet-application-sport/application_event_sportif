@@ -14,15 +14,20 @@
             <div id="menu">
                 <!--Création du menu. Mis à l'horizontal grâce au CSS. Page d'organisation de match-->
                     <ul id="onglets">
-                        <li ><a href="Page_principale.html">Accueil</a></li>
-                        <li class="active"><a href="Organiser_un_match.html">Organiser un match</a></li>
-                        <li><a href="Groupes.html">Mes groupes</a></li>
-                        <li><a href="Amis.html">Mes amis</a></li>
-                        <li><a href="Notifications.html">Mes notifications</a></li>
-                        <li><a href="Page_profil.html">Mon profil ▼</a>
+                        <li ><a href="{{ url_for('page_principale')}}">Accueil</a></li>
+                        <li class="active"><a href="{{ url_for('page_global_matchs')}}">Matchs ▼</a>
                             <ul>
-                                <li><a href="Page_profil.html">Configuration</a>
-                                <li><a href="Projet_devops_2019.html">Déconnexion</a></li>
+                                <li><a href="{{ url_for('page_mes_matchs')}}">Mes matchs</a></li>
+                                <li class="active"><a href="{{ url_for('page_organiser_un_match')}}">Création</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="{{ url_for('page_liste_groupes')}}">Mes groupes</a></li>
+                        <li><a href="{{ url_for('page_liste_amis')}}">Mes amis</a></li>
+                        <li><a href="{{ url_for('page_notifications')}}">Mes notifications</a></li>
+                        <li><a href="{{ url_for('page_profil')}}">Mon profil ▼</a>
+                            <ul>
+                                <li><a href="{{ url_for('page_profil')}}">Configuration</a></li>
+                                <li><a href="{{ url_for('sign_out')}}">Déconnexion</a></li>
                             </ul>
                         </li>
                     </ul>

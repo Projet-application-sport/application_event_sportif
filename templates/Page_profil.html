@@ -29,7 +29,7 @@
                     <fieldset id="section2">
                         <legend>Identifiants</legend>
                         <label for="Pseudo" required='required'>Mon pseudo</label>
-                        <input type = "text" id="Pseudo" required='required'><br><br> <!--Préremplir ce champ grâce à python et mysql-->
+                        <input type = "text" id="Pseudo" name="{{pseudo}}"  value="{{ pseudo}}" required='required'><br><br> <!--Préremplir ce champ grâce à python et mysql-->
                         <label for="New_pseudo">Nouveau pseudo</label>
                         <input type = "text" id="New_pseudo"><br><br>
                         <label for="New_mdp">Nouveau mot de passe</label>
@@ -42,7 +42,7 @@
                     <fieldset id="section2">
                         <legend>Informations personnelles</legend>
                         <label for="Adresse_email" required='required'>Mon adresse email</label>
-                        <input type = "email" id="Adresse_email" required='required'><br><br>
+                        <input type = "email" id="Adresse_email"name="{{mail}}"  value="{{mail}}" required='required'><br><br>
                     </fieldset>
                     <input class="button" type="submit" value="Modifier"/>
             </form>
