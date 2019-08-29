@@ -1,20 +1,19 @@
-USERNAME=deborahbdh
-IMAGE=footevent
-TAG:=$(shell TZ=UTC date +"%Y%m%d")
-
+USERNAME:=sofiane938
+IMAGE :=appli-flask
+TAG:=20190829
 
 all:
 
 build:
-	docker build -t $(USERNAME)/$(IMAGE):$(TAG) .
+	docker build -t $(IMAGE):$(TAG) .
 
 run:
-	docker-compose up
+	docker run -it -p5000:5000 $(IMAGE):$(TAG) 
 
-test: build
-	docker run -it $(USERNAME)/$(IMAGE):$(TAG) pipenv pytest
+test:
 
 deliver:
+	docker login 
 	docker tag $(USERNAME)/$(IMAGE):$(TAG) $(USERNAME)/$(IMAGE):latest
 	docker push $(USERNAME)/$(IMAGE):latest
-
+       	
