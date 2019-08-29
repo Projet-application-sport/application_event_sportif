@@ -18,4 +18,3 @@ deliver:
 	docker tag $(USERNAME)/$(IMAGE):$(TAG) $(USERNAME)/$(IMAGE):latest
 	docker push $(USERNAME)/$(IMAGE):latest
 
-
