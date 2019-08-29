@@ -12,7 +12,7 @@ run:
 	docker-compose up
 
 test: build
-	docker run -it $(USERNAME)/$(IMAGE):$(TAG) pipenv pytest
+	docker run -it $(USERNAME)/$(IMAGE):$(TAG) pipenv run pytest
 
 deliver:
 	docker tag $(USERNAME)/$(IMAGE):$(TAG) $(USERNAME)/$(IMAGE):latest
