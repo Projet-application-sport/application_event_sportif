@@ -9,6 +9,7 @@ verify_ssl = true
 flask = "*"
 pytest = "*"
 pytest-flask = "*"
+mysqlclient = "*"
+mailjet-rest = "*"
 
 [requires]
-python_version = "3.5"
