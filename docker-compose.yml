@@ -1,4 +1,4 @@
-version: "3.4"
+version: "3"
 
 services:
    postgresql:
@@ -15,7 +15,7 @@ services:
            networks:
                    - backend
    app:
-           image: projet_foot:29082019
+           image: projet-foot:latest 
            restart: "no"
            volumes:
                    - .:/app
