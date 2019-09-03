@@ -4,6 +4,7 @@
         <head>
         <meta charset=utf-8>
         <link rel="stylesheet" href="{{ url_for('static', filename='stylesheet_Projet_devops_2019.css') }}">
+      
         <title>FootEvent - Création d'évènement rencontre football</title>
         </head>
         <body>
@@ -29,6 +30,8 @@
                         </li>
                     </ul>
                 </div>
+                <div>
+                        
                 <form method= "post" action = "{{ url_for('liste_event')}}" id="myform">
                     <fieldset id="section2">
                         <legend>Détails de la rencontre</legend>
@@ -43,14 +46,55 @@
                         <label for="Terrain">Choix du terrain</label>
                         <input type="text" name="terrain" id="Terrain" ><br><br>
                         <label for="friend" required="required">Ajouter des participants</label>
-                        <input id="friend" type ="submit" value = "+"><br><br>
-                        <label for="friend" >Supprimer des participants</label>
-                        <input id="friend" type ="submit" value = "-"><br><br>
+                        <input id="addfriend" type ="button" value = "+" onclick="openModal()"><br><br>
+                        <label for="supfriend" >Supprimer des participants</label>
+                        <input id="supfriend" type ="button" value = "-" onclick="openwindow()"><br><br> 
+                        
                     </fieldset>
                     <input class="button" type ="submit" value = "Valider"><br>
                     <input class="buttonsup" type ="submit" value = "Supprimer l'event">
+                </div>
+
+               
+
+                <div id="overlay" class="overlay">
+                    <div id="popup" class="popup">
+                        <h2>Ajout d'amis
+                            <span id="btnClose" class="btnClose" onclick="closePopup()">&times;</span>
+                        </h2>
+                        <form method= "post" action = "inscription_formulaire.py" id="myform">
+                            <label for="friend" required="required">Pseudo</label>
+                            <input id="friend" type="text" required='required'><br><br>
+                            <input class="button" type ="submit" value = "Valider">
+                        </form>
+                    </div>
+                </div>
+                <div id="fond" class="fond">
+                    <div id="supfriend" class="supfriend">
+                        <h2>Suppression d'amis
+                                <span id="btnClose" class="btnClose" onclick="closePopup()">&times;</span>
+                        </h2>
+                        <form method= "post" action = "inscription_formulaire.py" id="myform">
+                            <label for="supfriend">Pseudo                            
+                                <select size="1">
+                                    <Option value="Friend1"></Option>
+                                    <Option value="Friend2"></Option>
+                                    <Option value="Friend3"></Option>
+                                    <Option value="Friend4"></Option>
+                                    <Option value="Friend5"></Option>
+                                    <Option value="Friend6"></Option>
+                                    <Option value="Friend7"></Option>
+                                    <Option value="Friend8"></Option>
+                                </select><br><br>
+                            </label>
+                            <input class="buttonsup" type ="submit" value = "Supprimer">
+                        </form> 
+                    </div>
+                </div>
+                <script type="text/javascript" src="{{ url_for('static', filename='js/popup.js') }}"></script>
             <footer>
                 <p><a href="mailto: footevent@footevent.com">Nous contacter</a></p>
             </footer>
+           
         </body>
     </Html>
