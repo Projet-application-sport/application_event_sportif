@@ -15,9 +15,8 @@ services:
            networks:
                    - backend
    app:
-           image: projet:projet
+           image: projet_foot:29082019
            restart: "no"
-           command: python3 app.py
            volumes:
                    - .:/app
            ports:
