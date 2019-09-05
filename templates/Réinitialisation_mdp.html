@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+    <Html>
+        <!--Front projet devops-->
+        <head>
+            <!--Les utilisateurs ne voient pas ces liens-->
+            <title>FootEvent - Création d'évènement rencontre football</title>
+            <link rel="stylesheet" href="stylesheet_Projet_devops_2019.css">
+            <meta charset=utf-8>
+        </head>
+        <body id=bodypa>
+            <h1>Bienvenue sur FootEvent !</h1>
+            <h2 id=soustitre>Réinitialisez votre mot de passe</h2>
+            <form method= "post" action = "{{ url_for('mdp_reset')}}" class="myform">   
+                <fieldset id="section1">
+                    <legend>Réinitialiser le mot de passe</legend>
+                        <label for="Mot_de_passe"> Mot de passe</label>
+                        <input type = "password" name="mot_de_passe" id="Mot_de_passe" required='required' minlength="8"><br><br>
+                        <label for="Confirmer_mdp">Confirmer le mot de passe</label>
+                        <input type = "password" id="Confirmer_mdp" required='required'><br><br>
+                </fieldset><br><br><br>
+                <input class="bouton" type ="submit" value = "Confirmer">
+            </form>
+            <p>Pas encore inscrit?<br><a href="http://127.0.0.1:5000/enregistrer_client">Créer un compte</a></p>
+            <!--Adresse mail de contact à créer-->
+            <footer>
+                <p><a href="mailto:footevent@footevent.com">Nous contacter</a></p>
+            </footer>
+        </body>
+    </Html>

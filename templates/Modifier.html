@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+    <Html>
+        <!--Front projet devops-->
+        <head>
+        <meta charset=utf-8>
+        <link rel="stylesheet" href="{{ url_for('static', filename='stylesheet_Projet_devops_2019.css') }}">
+      
+        <title>FootEvent - Création d'évènement rencontre football</title>
+        </head>
+        <body>
+            <h1>Modifier un match</h1>
+            <div id="menu">
+                <!--Création du menu. Mis à l'horizontal grâce au CSS. Page d'organisation de match-->
+                    <ul id="onglets">
+                        <li ><a href="{{ url_for('page_principale')}}">Accueil</a></li>
+                        <li class="active"><a href="{{ url_for('page_global_matchs')}}">Matchs ▼</a>
+                            <ul>
+                                <li><a href="{{ url_for('page_mes_matchs')}}">Mes matchs</a></li>
+                                <li class="active"><a href="{{ url_for('page_organiser_un_match')}}">Création</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="{{ url_for('page_liste_groupes')}}">Mes groupes</a></li>
+                        <li><a href="{{ url_for('page_liste_amis')}}">Mes amis</a></li>
+                        <li><a href="{{ url_for('page_notifications')}}">Mes notifications</a></li>
+                        <li><a href="{{ url_for('page_profil')}}">Mon profil ▼</a>
+                            <ul>
+                                <li><a href="{{ url_for('page_profil')}}">Configuration</a></li>
+                                <li><a href="{{ url_for('sign_out')}}">Déconnexion</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                        
+                <form method= "post" action = "{{ url_for('liste_event')}}" id="myform">
+                    <fieldset id="section2">
+                        <legend>Détails de la rencontre</legend>
+                        <label for="Event_name" required='required'>Intitulé de la rencontre</label>
+                        <input type="text" name="{{ nom_event }}" value="{{ nom_event }}" id="Event_name" ><br><br>
+                        <label for="Date_de_rencontre" >Date de la rencontre</label>
+                        <input type = "text" name="{{ date }}" value="{{ date }}"id="Date_de_rencontre" ><br><br>
+                        <label for="Heure" >Heure</label>
+                        <input type="text" name="{{ heure }}" value="{{ heure }}" id="Heure" ><br><br>
+                        <label for="Departement_id">Choix du département du terrain</label>
+                        <input type="text" id="Departement_id" ><br><br>
+                        <label for="Terrain">Choix du terrain</label>
+                        <input type="text" name="terrain" id="Terrain" ><br><br>
+                        <label for="friend" required="required">Ajouter des participants</label>
+                        <input id="addfriend" type ="button" value = "+" onclick="openModal()"><br><br>
+                        <label for="supfriend" >Supprimer des participants</label>
+                        <input id="supfriend" type ="button" value = "-" onclick="openwindow()"><br><br> 
+                        
+                    </fieldset>
+                    <input class="button" type ="submit" value = "Valider"><br>
+                    <input class="buttonsup" type ="submit" value = "Supprimer l'event">
+                </div>
+
+               
+
+                <div id="overlay" class="overlay">
+                    <div id="popup" class="popup">
+                        <h2>Ajout d'amis
+                            <span id="btnClose" class="btnClose" onclick="closePopup()">&times;</span>
+                        </h2>
+                        <form method= "post" action = "inscription_formulaire.py" id="myform">
+                            <label for="friend" required="required">Pseudo</label>
+                            <input id="friend" type="text" required='required'><br><br>
+                            <input class="button" type ="submit" value = "Valider">
+                        </form>
+                    </div>
+                </div>
+                <div id="fond" class="fond">
+                    <div id="supfriend" class="supfriend">
+                        <h2>Suppression d'amis
+                                <span id="btnClose" class="btnClose" onclick="closePopup()">&times;</span>
+                        </h2>
+                        <form method= "post" action = "inscription_formulaire.py" id="myform">
+                            <label for="supfriend">Pseudo                            
+                                <select size="1">
+                                    <Option value="Friend1"></Option>
+                                    <Option value="Friend2"></Option>
+                                    <Option value="Friend3"></Option>
+                                    <Option value="Friend4"></Option>
+                                    <Option value="Friend5"></Option>
+                                    <Option value="Friend6"></Option>
+                                    <Option value="Friend7"></Option>
+                                    <Option value="Friend8"></Option>
+                                </select><br><br>
+                            </label>
+                            <input class="buttonsup" type ="submit" value = "Supprimer">
+                        </form> 
+                    </div>
+                </div>
+                <script type="text/javascript" src="{{ url_for('static', filename='js/popup.js') }}"></script>
+            <footer>
+                <p><a href="mailto: footevent@footevent.com">Nous contacter</a></p>
+            </footer>
+           
+        </body>
+    </Html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+    <Html>
+        <!--Front projet devops-->
+        <head>
+        <meta charset=utf-8>
+        <link rel="stylesheet" href="{{ url_for('static', filename='stylesheet_Projet_devops_2019.css') }}">
+        <title>FootEvent - Création d'évènement rencontre football</title>
+        </head>
+        <body>
+            <h1>Mon profil</h1>
+            <div id="menu">
+                    <!--Création du menu. Mis à l'horizontal grâce au CSS-->
+                <ul id="onglets">
+                    <li ><a href="{{ url_for('page_principale')}}">Accueil</a></li>
+                    <li><a href="{{ url_for('page_organiser_un_match')}}">Organiser un match</a></li>
+                    <li><a href="{{ url_for('page_liste_groupes')}}">Mes groupes</a></li>
+                    <li><a href="{{ url_for('page_liste_amis')}}">Mes amis</a></li>
+                    <li><a href="{{ url_for('page_notifications')}}">Mes notifications</a></li>
+                    <li class="active"><a href="{{ url_for('page_profil')}}">Mon profil ▼</a>
+                        <ul>
+                            <li><a href="Page_profil.html">Configuration</a></li>
+                            <li><a href="{{ url_for('sign_out')}}">Déconnexion</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <!--Chercher comment créer la structure de la page profil avec la modification des champs-->
+            <form method= "post" action = "inscription_formulaire.py" id="myform">
+                    <fieldset id="section2">
+                        <legend>Identifiants</legend>
+                        <label for="Pseudo" required='required'>Mon pseudo</label>
+                        <input type = "text" id="Pseudo" name="{{pseudo}}"  value="{{ pseudo}}" required='required'><br><br> <!--Préremplir ce champ grâce à python et mysql-->
+                        <label for="New_pseudo">Nouveau pseudo</label>
+                        <input type = "text" id="New_pseudo"><br><br>
+                        <label for="New_mdp">Nouveau mot de passe</label>
+                        <input type = "password" id="New_mdp" minlength="8"><br><br>
+                        <label for="Confirmer_new_mdp">Confirmer le mot de passe</label>
+                        <input type = "password" id="Confirmer_new_mdp" required='required'><br><br>
+                        <label for="photo" required='required'>Ma photo de profil</label>
+                        <input type="file" name="file">
+                    </fieldset><br><br>
+                    <fieldset id="section2">
+                        <legend>Informations personnelles</legend>
+                        <label for="Adresse_email" required='required'>Mon adresse email</label>
+                        <input type = "email" id="Adresse_email"name="{{mail}}"  value="{{mail}}" required='required'><br><br>
+                    </fieldset>
+                    <input class="button" type="submit" value="Modifier"/>
+            </form>
+            <footer>
+                <p><a href="mailto: footevent@footevent.com">Nous contacter</a></p>
+            </footer>
+        </body>
+    </Html>

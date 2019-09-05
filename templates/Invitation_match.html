@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+    <Html>
+        <!--Front projet devops-->
+        <head>
+        <meta charset=utf-8>
+        <link rel="stylesheet" href="{{ url_for('static', filename='stylesheet_Projet_devops_2019.css') }}">
+        <title>FootEvent - Création d'évènement rencontre football</title>
+        </head>
+        <body>
+            <h1>Mes notifications</h1>
+            <div id="menu">
+                    <!--Création du menu. Mis à l'horizontal grâce au CSS-->
+                <ul id="onglets">
+                    <li ><a href="Page_principale.html">Accueil</a></li>
+                    <li><a href="Global_matchs.html">Matchs ▼</a>
+                        <ul>
+                            <li><a href="Mes_matchs.html">Mes matchs</a></li>
+                            <li><a href="Organiser_un_match.html">Création</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="Groupes.html">Mes groupes</a></li>
+                    <li><a href="Amis.html">Mes amis</a></li>
+                    <li class="active"><a href="Notifications.html">Mes notifications</a></li>
+                    <li><a href="Page_profil.html">Mon profil ▼</a>
+                        <ul>
+                            <li><a href="Page_profil.html">Configuration</a></li>
+                            <li><a href="Projet_devops_2019.html">Déconnexion</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <form method= "post" action = "inscription_formulaire.py" id="myform">
+                <fieldset id="section2">
+                    <legend>Invitation à un match</legend>
+                    <label for="Event_name" required='required'>Intitulé de la rencontre</label>
+                    <input type = "text" id="Event_name"  disabled="disabled"><br><br> <!--Préremplir ce champ grâce à python et mysql-->
+                    <label for="Admin" required='required'>Organisateur</label>
+                    <input type = "text" id="Admin" disabled="disabled"><br><br> <!--Préremplir ce champ grâce à python et mysql-->
+                    <label for="Date_de_rencontre" required='required'>Date de la rencontre</label>
+                    <input type = "date" id="Date_de_rencontre" disabled="disabled"><br><br>
+                    <label for="Heure" required='required'>Heure</label>
+                    <input type="time" id="Heure" disabled="disabled"><br><br>
+                </fieldset>
+                <fieldset id="section3">
+                    <legend>Rejoindre l'événement</legend>
+                    <INPUT type="checkbox" name="oui" value="1" checked>Oui<br>
+                    <INPUT type="checkbox" name="non" value="2">Non<br>
+                </fieldset>
+                <input class="button" type ="submit" value = "Valider"><br>
+            </form>
+            <footer>
+                <p><a href="mailto: footevent@footevent.com">Nous contacter</a></p>
+            </footer>
+        </body>
+    </Html>

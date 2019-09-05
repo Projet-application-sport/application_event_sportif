@@ -1,0 +1,30 @@
+version: "3"
+
+services:
+   postgresql:
+           image: postgres:10.10
+           restart: "no"
+           environment:
+                   POSTGRES_DB: db
+                   POSTGRES_USER: admin
+                   POSTGRES_PASSWORD: password
+           volumes:
+                   - .:/app
+                   - postgres_db:/var/lib/postgresql/data
+
+           networks:
+                   - backend
+   app:
+           image: projet-foot:latest 
+           restart: "no"
+           volumes:
+                   - .:/app
+           ports:
+                   - "5000:5000"
+           networks:
+                   - backend
+volumes:
+  postgres_db:
+networks:
+  backend:
+

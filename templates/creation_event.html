@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+    <Html>
+        <!--Front projet devops-->
+        <head>
+        <meta charset=utf-8>
+        <meta charset="utf-8">
+        <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.js"></script>
+        <link rel="stylesheet" href="{{ url_for('static', filename='stylesheet_Projet_devops_2019.css')}}">
+        <title>FootEvent - Création d'évènement rencontre football</title>
+        </head>
+        <body>
+            <h1>Organiser un match</h1>
+            <div id="menu">
+                <!--Création du menu. Mis à l'horizontal grâce au CSS. Page d'organisation de match-->
+                    <ul id="onglets">
+                        <li ><a href="{{ url_for('page_principale')}}">Accueil</a></li>
+                        <li class="active"><a href="{{ url_for('page_global_matchs')}}">Matchs ▼</a>
+                            <ul>
+                                <li><a href="{{ url_for('page_mes_matchs')}}">Mes matchs</a></li>
+                                <li class="active"><a href="{{ url_for('page_organiser_un_match')}}">Création</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="{{ url_for('page_liste_groupes')}}">Mes groupes</a></li>
+                        <li><a href="{{ url_for('page_liste_amis')}}">Mes amis</a></li>
+                        <li><a href="{{ url_for('page_notifications')}}">Mes notifications</a></li>
+                        <li><a href="{{ url_for('page_profil')}}">Mon profil ▼</a>
+                            <ul>
+                                <li><a href="{{ url_for('page_profil')}}">Configuration</a></li>
+                                <li><a href="{{ url_for('sign_out')}}">Déconnexion</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <form method= "post"  id="myform" >
+                    <!--Création du formulaire d'organisation de match-->
+                    <!--Voir comment créer un formulaire pour montrer les possibilités de terrains/adresses-->
+                    <fieldset id="section2">
+                        <legend>Détails de la rencontre</legend>
+                        <label for="Event_name" required='required'>Intitulé de la rencontre</label>
+                        <input type="text" id="Event_name" name="nom_event" placeholder="ex: Le Classico"><br><br>
+                        <label for="Date_de_rencontre" required='required'>Date de la rencontre</label>
+                        <input type = "date" name="date_event" id="Date_de_rencontre"><br><br>
+                        <label for="Heure" required='required'>Heure</label>
+                        <input type="time" name="heure_event" id="Heure"><br><br>
+                        <label>Choix du terrain:
+                            <select name="event_select" >
+                                {% for each in list_tested %}
+                                  <option value="{{each}}">{{each}}</option>
+                                {% endfor %}
+                                </select>
+                        </label><br><br>
+                        <label for="friend" required="required">Ajouter des participants</label>
+                        <input type="text" name="partipants_event" id="firstname_autocomplete"><br><br>
+
+
+                        <script>
+                            $(function() {
+                                $.ajax({
+                                    url: '{{ url_for("autocomplete") }}'
+                                    }).done(function (data){
+                                        $('#firstname_autocomplete').autocomplete({
+                                            source: data,
+                                            minLength: 2
+                                        });
+                                    });
+                                });
+                        </script>
+
+
+                        <input id="add" value = "+" onclick="addLi()" readonly ><br><br><!--Ajouter cette fonctionnalité au bouton de création de l'event-->
+                        <!--<button class="btn" onclick="addLi()">+</button>-->
+                        <ul id="list">
+                            
+                        </ul>
+
+                        <script>
+            
+                            function addLi()
+                            {
+                
+                                var txtVal = document.getElementById('firstname_autocomplete').value,
+                                    listNode = document.getElementById('list'),
+                                    liNode = document.createElement("LI"),
+                                    txtNode = document.createTextNode(txtVal);
+                            
+                                 liNode.appendChild(txtNode);
+                                 listNode.appendChild(liNode);
+                            
+                            }
+                            
+                        </script>
+                       
+                    </fieldset>
+                    <div id="carrousel">
+                            <!--Création du carrousel permettant de faire défiler les photos des terrains-->
+                            <ul>
+                                <li><img src=""/></li>
+                                <li><img src=""/></li>
+                                <li><img src=""/></li>
+                                <li><img src=""/></li>
+                                <li><img src=""/></li>
+                                <li><img src=""/></li>
+                                <li><img src=""/></li>
+                            </ul>
+                            
+                    
+                        </div>
+                    <input class="button" type ="submit" value = "Valider l'événement" action="{{ url_for('create_event')}}">
+            
+                    <script type="text/javascript" src="{{ url_for('static', filename='js/popup.js') }}"></script>
+            <footer>
+                <p><a href="mailto: footevent@footevent.com">Nous contacter</a></p>
+            </footer>
+
+           
+        </body>
+    </Html>
