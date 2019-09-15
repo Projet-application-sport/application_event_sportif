@@ -14,7 +14,9 @@ import os
 import cgi
 import cgitb; cgitb.enable()
 import json 
-#import datetime, date, time
+from datetime import datetime
+from weather import query_api
+from mail import envoi_mail_inscription, envoi_mail_reset_mdp
 
 # On créé une conexion MySQL avec le connecteur MySQLdb
 connection = MySQLdb.connect(host='127.0.0.1', port=3306, user='root', passwd='', db='db_application_event_sportif')
@@ -94,8 +96,6 @@ def enregistrerclient():
         mot_de_passe = request.form["mot_de_passe"]
         # On va utiliser une table de hashage afin de crypter le mot de passe
         mot_de_passe_hash = hashlib.sha256(str(mot_de_passe).encode("utf-8")).hexdigest()
-        # On va créer un Id unique pour chaque utilisateur
-        #id_client = str(uuid.uuid4())
         telephone = request.form["telephone"]
         date_de_naissance = request.form["date_de_naissance"]      
         # On va vérifier si l'adresse saisie est stockée ou non dans la Base De Données
@@ -121,12 +121,6 @@ def enregistrerclient():
             connection.commit()
             #envoi_mail_inscription(e_mail, prenom)
             return redirect('/accueil')
-
-
-
-
-
-
 
 # Vue pour la connexion avec le login et le mot de passe
 @app.route("/se_connecter", methods=["GET", "POST"])
@@ -159,18 +153,11 @@ def se_connecter():
             session['connection_user'] = True
             session['pseudo_user'] = e_mail
             flash('You were successfully logged in')
-            #session["e_mail"] = request.form["e_mail"]
-            #return redirect(url_for('mes_informations'))
             return redirect('/accueil')
-            
-            
+                      
     # Si on souhaite récupérer la page web
     elif request.method == "GET":
         return render_template("se_connecter.html")
-
-
-
-
 
 
 # Vue pour permettre d'acceder a la page d'acceuil du site     
@@ -180,10 +167,7 @@ def accueil():
     	    return render_template('Page_principale.html')
         else: 
             return redirect('/se_connecter')
-
-
-
-   
+  
 # Vue pour permettre à l'utilisateur connecté d'acceder a la page d'accueil sinon s'il n'est pas connecté on le renvoie ver la route /se_connecter          
 @app.route("/")
 def home():
@@ -192,9 +176,6 @@ def home():
         return redirect('/accueil')
     else: 
         return redirect('/se_connecter')
-
-
-
 
 #Vue pour la Deconnexion de la session et redirection vers la page de login
 @app.route('/sign_out')
@@ -206,9 +187,6 @@ def sign_out():
         return redirect('/se_connecter')
     else:
         return redirect('/se_connecter')
-
-
-
 
 
 # Vue pour la saisie de l'adresse mail lorsque l'utilisateur a oublie son mot de passe
@@ -299,46 +277,88 @@ def autocomplete():
 @app.route("/create_event", methods=["GET", "POST"])
 def create_event():
 
+   data=None
     # Si on souhaite récupérer la page web
     if request.method == "GET":
 
         req_stade = "SELECT Nom_du_stade FROM stade"
-        # On exécute la requête SQL
         cursor.execute(req_stade)
-        # On récupère toutes les lignes du résultat de la requête
         resultat_req_stades = cursor.fetchall()
-        # On Convertit le résultat en une liste 
+        # On Convertit le résultat en une liste (compréhension de liste)
         list_tested = [i for sub in resultat_req_stades for i in sub]  
-
         # On affiche la page html avec la liste des stades en paramètre
         return render_template('creation_event.html', list_tested=list_tested)
-
-     # Si on souhaite envoyer des paramètres 
+      
     if request.method == "POST": 
             
-        # On récupère les informations saisies par l'utilisateur
-        name = request.form["nom_event"]
-        date = request.form["date_event"]
-        time = request.form["heure_event"]
-        # On récupère le stade choisi dans la liste déroulante
-        select_stade = request.form.get('event_select')
+        # On récupère les informations saisies par l'utilisateur (requête AJAX) 
+        data = request.json
+        name = data[0]['value']
+        date = data[1]['value']
+        time = data[2]['value']
+        select_stade = data[3]['value']
+        participant = data[5]['value']
 
+        # print(participant)
         # On récupère l'id du stade afin de pouvoir le stocker dans la TABLE events
         req_id_stade = "SELECT id_stade FROM stade WHERE Nom_du_stade = '%s' "
         # On exécute la requête SQL
         cursor.execute(req_id_stade % select_stade)
         # On récupère toutes les lignes du résultat de la requête
         result_id_stade = cursor.fetchall()
-        #resultat = str(result_id_stade)
+    
+        mail = session.get('pseudo_user')
+        
+        if mail:
 
-        # On insère les information saisies dans la TABLE events
-        req_enregister_event = "INSERT INTO events (name_ev, date_ev, hour_ev, id_stadeA) VALUES (%s,%s,%s,%s)"
-        # On exécute la requête SQL
-        cursor.execute(req_enregister_event, (name, date, time, result_id_stade))
-        # On sauvegarde les informations
-        connection.commit()
+            req_date_consulter_event  = "SELECT pseudo FROM users WHERE email = '%s' " # On exécute la requête SQL
+            cursor.execute(req_date_consulter_event % mail)
+            pseudo = str(cursor.fetchone()[0])
+
+            # On insère les information saisies dans la TABLE events
+            req_enregister_event = "INSERT INTO events (name_ev, date_ev, hour_ev, id_stadeA, admin) VALUES (%s,%s,%s,%s,%s)"
+            # On exécute la requête SQL
+            cursor.execute(req_enregister_event, (name, date, time, result_id_stade, pseudo))
+            # On sauvegarde les informations
+            connection.commit()
+
+            #On insére le participant et l'id event dans la table INVITATIONS
+            req_id_event = "SELECT id_event FROM events WHERE name_ev = '%s'"
+            # On exécute la requête SQL
+            cursor.execute(req_id_event % name)
+            # On récupère toutes les lignes du résultat de la requête
+            result_id_event = cursor.fetchall()
+
+            for i in participant:
+                 # On va vérifier si l'adresse saisie est stockée ou non dans la Base De Données
+                req_client_existant = "SELECT id_user FROM users WHERE email = '%s' "
+                # On exécute la requête SQL
+                cursor.execute(req_client_existant % i)
+                # On récupère toutes les lignes du résultat de la requête
+                resultat_req_client_existant = cursor.fetchall()
+                print(resultat_req_client_existant)
+
+                if len(resultat_req_client_existant) > 0:
+                
+                    #On insére le participant et l'id event dans la table INVITATIONS
+                    req_id_user = "SELECT id_user FROM users WHERE email = '%s'"
+                    # On exécute la requête SQL
+                    cursor.execute(req_id_user % i)
+                    # On récupère toutes les lignes du résultat de la requête
+                    result_id_user = cursor.fetchall()
+
+                    req_enregister_invitation = "INSERT INTO invitation (id_userB, id_eventB,champ_de_reponse) VALUES (%s,%s,%s)"
+                    # On exécute la requête SQL
+                    cursor.execute(req_enregister_invitation, (result_id_user, result_id_event, 'NULL'))
+                    # On sauvegarde les informations
+                    connection.commit()
+                else:
+                    flash("l'adresse n'existe pas dans la BDD", "error")
+
         # On réactualise la page lorsuqu'on valide l'événement
         return redirect('/create_event')
+
+    
     
 @app.route("/liste_event", methods=["GET", "POST"])
 def liste_event():
