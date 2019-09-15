@@ -426,14 +426,24 @@ def consulter_event():
 
     # Si on souhaite récupérer la page web
     if request.method == "GET":
-    
-        messages = request.args['select_event']
-        #messages = session['messages']  
+        
+        messages = request.args['select_event'] 
         dates = request.args['date']
         heures = request.args['heure']
+        stade = request.args['stade']
         
+        req_id_event = "SELECT id_event FROM events WHERE name_ev='%s'"
+        cursor.execute(req_id_event % messages)
+        ff = cursor.fetchone()[0]
+        print(ff)
+
+        req_participants = " SELECT u.pseudo FROM users as u JOIN participant as p ON p.id_userA=u.id_user JOIN events as e ON e.id_event=p.id_eventA WHERE p.id_eventA=%s"
+        cursor.execute(req_participants % ff)
+        print(cursor.fetchall())
+
         # On affiche la page html avec la liste des stades en paramètre
-        return render_template('Modifier.html', nom_event = messages, date=dates, heure=heures)
+        return render_template('Modifier.html', nom_event = messages, date=dates, heure=heures, stade=stade)
+
 
 @app.route("/configuration", methods=["GET", "POST"])
 def configuration():
