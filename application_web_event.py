@@ -359,7 +359,6 @@ def create_event():
         return redirect('/create_event')
 
     
-    
 @app.route("/liste_event", methods=["GET", "POST"])
 def liste_event():
 
@@ -380,29 +379,48 @@ def liste_event():
 
         # On récupère les informations saisies par l'utilisateur
         select_event = request.form.get('event_select')
-    
-        # On stocke l'email dans une session afin de l'utiliser dans la route /reset_mdp
+        print(session['select_event'])
+        session['select_event'] = select_event
         
-        #session['messages'] = select_event
-
-        req_date_consulter_event  = "SELECT date_ev FROM events WHERE name_ev = '%s' "
-         # On exécute la requête SQL
+        req_date_consulter_event  = "SELECT admin FROM events WHERE name_ev = '%s' "
         cursor.execute(req_date_consulter_event % select_event)
-        date  = cursor.fetchall()
-        datee = str(date)
-        dateee = datee[16:27]
-        date_event= dateee.replace(",", "/")
+        admin = str(cursor.fetchone()[0])
 
-        req_date_consulter_event  = "SELECT hour_ev FROM events WHERE name_ev = '%s' "
-         # On exécute la requête SQL
-        cursor.execute(req_date_consulter_event % select_event)
-        heure  = cursor.fetchall()
-        heuree = str(heure)
-        heureee = heuree[29:34]
-        heure_event = str(datetime.timedelta(seconds=int(heureee)))
+        mail = session.get('pseudo_user')
+        req_date_consulter_event  = "SELECT pseudo FROM users WHERE email = '%s' " # On exécute la requête SQL
+        cursor.execute(req_date_consulter_event % mail)
+        pseudo = str(cursor.fetchone()[0])
+  
+        if admin == pseudo:
 
-        return redirect(url_for('consulter_event', select_event=select_event, date = date_event, heure = heure_event))
+            req_date_consulter_event  = "SELECT date_ev FROM events WHERE name_ev = '%s' "
+            cursor.execute(req_date_consulter_event % select_event)
+            ddd = str(cursor.fetchone()[0])
+            date_event = datetime.strptime(ddd, '%Y-%m-%d').strftime('%Y-%m-%d')
+            # session['date_event']=date_event
 
+            req_date_consulter_event  = "SELECT hour_ev FROM events WHERE name_ev = '%s' "
+            cursor.execute(req_date_consulter_event % select_event)
+            heure_event = str(cursor.fetchone()[0])
+            # session['heure_event']=heure_event
+
+            req_id_stade_event  = "SELECT id_stadeA FROM events WHERE name_ev = '%s' "
+            cursor.execute(req_id_stade_event % select_event)
+            id_stade_event = str(cursor.fetchone()[0])
+            # session['id_stade_event']=id_stade_event 
+
+            req_stade_consulter_event  = "SELECT Nom_du_stade FROM stade WHERE id_stade = '%s' "
+            cursor.execute(req_stade_consulter_event % id_stade_event)
+            stade = str(cursor.fetchone()[0])
+            # session['stade']=stade
+            print(stade)
+
+            # On affiche la page html avec la liste des stades en paramètre
+            return redirect(url_for('modifier_event', select_event=select_event, date = date_event, heure = heure_event, stade=stade))
+        else:
+            flash("Vous n'avez pas l'autorisation de modifier cet événement", "error")
+            return redirect('/liste_event')
+        
 @app.route("/consulter_event", methods=["GET", "POST"])
 def consulter_event():
 
