@@ -103,6 +103,20 @@ def localisation():
         print(latitude)
         print(longitude)
         return render_template('geolocalisation.html')
+    
+@app.route("/meteo" , methods=['GET', 'POST'])
+def meteo():
+
+        latitude = session['lat']
+        longitude= session['long']
+        data = []
+        error = None      
+        resp = query_api(latitude, longitude)     
+        if resp:
+            data.append(resp)    
+        if len(data) != 2: 
+            error = 'pas de reponse de l API de la météo' 
+        return render_template('meteo.html', data=data, error=error)
 
     
 #Vue pour la création d'un utilisateur
