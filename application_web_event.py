@@ -34,7 +34,20 @@ app.config.update(
 
 @app.route('/page_principale')
 def page_principale():
-    return render_template('Page_principale.html')
+    
+    if request.method == "GET":
+
+        req_stade = "SELECT * FROM events"
+        cursor.execute(req_stade)
+        resultat_req_stades = cursor.fetchall()
+        
+        datee = []
+        for row in resultat_req_stades:
+            date = row[2]
+            print(date)
+            datee.append(datetime.strptime(str(date), '%Y-%m-%d').strftime('%Y-%m-%d'))
+
+    return render_template('Page_principale.html', date=datee)
 
 @app.route('/page_organiser_un_match')
 def page_organiser_un_match():
