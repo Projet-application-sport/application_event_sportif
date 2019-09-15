@@ -89,6 +89,21 @@ def page_profil():
 def page_invitation_match():
     return render_template('Invitation_match.html')
 
+
+@app.route('/localisation', methods=["GET", "POST"]) 
+def localisation():
+    if request.method == "GET":
+        return render_template('geolocalisation.html')
+    if request.method == "POST":  
+        data = request.json
+        latitude = data['latitude']
+        session['lat']= latitude
+        longitude = data['longitude']
+        session['long']= longitude
+        print(latitude)
+        print(longitude)
+        return render_template('geolocalisation.html')
+
     
 #Vue pour la création d'un utilisateur
 @app.route("/enregistrer_client", methods=["GET", "POST"])
