@@ -400,18 +400,32 @@ def consulter_event():
 @app.route("/configuration", methods=["GET", "POST"])
 def configuration():
 
-    if request.method == "GET":
+if request.method == "GET":
 
         mail = session.get('pseudo_user')
         if mail:
 
             req_date_consulter_event  = "SELECT pseudo FROM users WHERE email = '%s' " # On exécute la requête SQL
             cursor.execute(req_date_consulter_event % mail)
-            date  = cursor.fetchall()
-            list_tested = [i for sub in date for i in sub]
-            date = str(list_tested)
+            date = str(cursor.fetchone()[0])
+           
+            return render_template('Page_profil.html', pseudo=date, mail=mail)
 
-            return render_template('Page_profil.html', pseudo = date, mail=mail)
+    if request.method == "POST":
+        
+        #On récupère le mot de passe saisi par l'utilisateur
+        pseudo = request.form["pseudoo"]
+        mdp = request.form["mdp"]
+        # on crypte le mot de passe
+        mdp_hash = hashlib.sha256(str(mdp).encode("utf-8")).hexdigest()
+        # on récupère l'email depuis la vue /mdp_oublie
+        mail = session.get('pseudo_user')
+        # On met a jour le mot de passe dans la BDD
+        req_update_mdp_client = "UPDATE users SET passewd= %s, pseudo= %s WHERE email = %s"
+        cursor.execute(req_update_mdp_client, (mdp_hash, pseudo, mail))
+        connection.commit()
+        
+        return redirect('/configuration')
 
 
 if __name__ == '__main__':
