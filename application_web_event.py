@@ -426,7 +426,92 @@ if request.method == "GET":
         connection.commit()
         
         return redirect('/configuration')
+    
+@app.route("/invitation_match", methods=["GET", "POST"])
+def invitation_match():
 
+    if request.method == "GET":
+
+        pseudo_user = session.get('pseudo_user')
+        #On insére le participant et l'id event dans la table INVITATIONS
+        req_id_user = "SELECT id_user FROM users WHERE email = '%s'"
+        # On exécute la requête SQL
+        cursor.execute(req_id_user % pseudo_user)
+        # On récupère toutes les lignes du résultat de la requête
+        sisi = str(cursor.fetchone()[0])
+        #print(sisi)
+        
+        #On insére le participant et l'id event dans la table INVITATIONS
+        req_id_event = "SELECT id_eventB FROM invitation WHERE id_userB = '%s' and champ_de_reponse = 'NULL'"
+        # On exécute la requête SQL
+        cursor.execute(req_id_event % sisi)
+        # On récupère toutes les lignes du résultat de la requête
+        print(cursor.execute(req_id_event % sisi))
+        
+        if cursor.execute(req_id_event % sisi) > 0:
+
+            sisii = str(cursor.fetchone()[0])
+            print(sisii)
+            session['id_event'] = sisii
+            #On insére le participant et l'id event dans la table INVITATIONS
+            req_id_event = "SELECT * FROM events WHERE id_event = '%s'"
+            # On exécute la requête SQL
+            cursor.execute(req_id_event % sisii)
+            # On récupère toutes les lignes du résultat de la requête
+            result_id_event = cursor.fetchall()
+
+            for row in result_id_event:
+                resultatid = row[1]
+                resultatdate = row[2]
+                resultatheure = row[3]
+                resultatadmin = row[5]
+
+            return render_template('Invitation_match.html', event = resultatid, datee = resultatdate, heuree = resultatheure, admin=resultatadmin)
+        
+        else:
+             return render_template('Invitation_match.html')
+
+    if request.method == "POST":
+
+        reponse_invitation = request.form.getlist('reponse')
+        id_event_inviation = session['id_event']
+        print(id_event_inviation)
+        pseudo_user = session.get('pseudo_user')
+        #On insére le participant et l'id event dans la table INVITATIONS
+        req_id_user = "SELECT id_user FROM users WHERE email = '%s'"
+        # On exécute la requête SQL
+        cursor.execute(req_id_user % pseudo_user)
+        # On récupère toutes les lignes du résultat de la requête
+        sisi = str(cursor.fetchone()[0])
+        
+
+        req_enregister_reponse_invitation = "UPDATE invitation SET champ_de_reponse= %s WHERE id_eventB = %s and id_userB = %s"
+        # On exécute la requête SQL
+        cursor.execute(req_enregister_reponse_invitation, (reponse_invitation, id_event_inviation, sisi))
+        # On sauvegarde les informations
+        connection.commit()
+
+        #On insére le participant et l'id event dans la table INVITATIONS
+        req_id_user = "SELECT champ_de_reponse FROM invitation WHERE id_eventB = %s and id_userB = %s"
+        # On exécute la requête SQL
+        cursor.execute(req_id_user, (id_event_inviation, sisi))
+        sisiii = str(cursor.fetchone()[0])
+        
+
+        if sisiii == "present":
+            req_id_user = "SELECT id_userB FROM invitation WHERE id_eventB = %s and id_userB = %s"
+            # On exécute la requête SQL
+            cursor.execute(req_id_user, (id_event_inviation, sisi))
+            user_id_invitation = str(cursor.fetchone()[0])
+            print(user_id_invitation)
+            
+            req_enregister_invitation = "INSERT INTO participant (id_userA, id_eventA) VALUES (%s,%s)"
+            # On exécute la requête SQL
+            cursor.execute(req_enregister_invitation, (user_id_invitation, id_event_inviation))
+            # On sauvegarde les informations
+            connection.commit()
+
+        return render_template('Invitation_match.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
