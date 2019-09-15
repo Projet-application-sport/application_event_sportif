@@ -1,65 +1,94 @@
 <!DOCTYPE html>
-    <Html>
-        <!--Front projet devops-->
-        <head>
+<Html>
+    <!--Front projet devops-->
+
+    <head>
         <meta charset=utf-8>
         <link rel="stylesheet" href="{{ url_for('static', filename='stylesheet_Projet_devops_2019.css') }}">
-        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-        <link rel="stylesheet" href="/resources/demos/style.css">
-        <title>FootEvent - Création d'évènement rencontre football</title>
-        </head>
-        <body>
-            <h1>Accueil FootEvent</h1>
-            <div id="menu">
-                    <!--Création du menu. Mis à l'horizontal grâce au CSS-->
-                <ul id="onglets">
-                    <li class="active"><a href="{{ url_for('page_principale')}}">Accueil</a></li>
-                    <li><a href="{{ url_for('page_global_matchs')}}">Matchs ▼</a>
-                        <ul>
-                            <li><a href="{{ url_for('page_mes_matchs')}}">Mes matchs</a></li>
-                            <li><a href="{{ url_for('page_organiser_un_match')}}">Création</a></li>
-                        </ul>
-                    </li>
-                    <li><a href="{{ url_for('page_liste_groupes')}}">Mes groupes</a></li>
-                    <li><a href="{{ url_for('page_liste_amis')}}">Mes amis</a></li>
-                    <li><a href="{{ url_for('page_notifications')}}">Mes notifications</a></li>
-                    <li><a href="{{ url_for('page_profil')}}">Mon profil ▼</a>
-                        <ul>
-                            <li><a href="{{ url_for('page_profil')}}">Configuration</a></li>
-                            <li><a href="{{ url_for('sign_out')}}">Déconnexion</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-            <!--Ici j'essaye de sectionner la page en plusieurs zone pour afficher le contenu de façon plus jolie-->
-            <section>
-                <article id="premier_article">
-                    <p class= interactifs>Calendrier de mes matchs</p>
-                    <div id="datepicker">Date: </div>
-                </article>
-                 <article id="deuxieme_article">
-                    <p class= interactifs>Météo</p>
-                </article>
-                <article>
-                    <p class= interactifs>Création d'un match</p>
-                    <a href="Organiser_un_match.html"><input type ="submit" value = "+"></a>
-                </article>
-                <article>
-                    <p class= interactifs>Mes amis</p>
-                </article> 
-            </section>
-            <footer>
-                <p><a href="mailto: footevent@footevent.com">Nous contacter</a></p>
-            </footer>
+        <link rel="stylesheet" href="{{ url_for('static', filename='style-calendar.css') }}">
+        <link rel="stylesheet" href="https://code.jquery.com/ui/1.7.1/themes/base/jquery-ui.css">
 
-            <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-            <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <title>FootEvent - Création d'évènement rencontre football</title>
+    </head>
+
+    <body>
+        <h1>Accueil FootEvent</h1>
+        <div id="menu">
+            <!--Création du menu. Mis à l'horizontal grâce au CSS-->
+            <ul id="onglets">
+                <li class="active"><a href="{{ url_for('page_principale')}}">Accueil</a></li>
+                <li><a href="{{ url_for('page_global_matchs')}}">Matchs ▼</a>
+                    <ul>
+                        <li><a href="{{ url_for('page_mes_matchs')}}">Mes matchs</a></li>
+                        <li><a href="{{ url_for('page_organiser_un_match')}}">Création</a></li>
+                    </ul>
+                </li>
+                <li><a href="{{ url_for('page_liste_groupes')}}">Mes groupes</a></li>
+                <li><a href="{{ url_for('page_liste_amis')}}">Mes amis</a></li>
+                <li><a href="{{ url_for('page_notifications')}}">Mes notifications</a></li>
+                <li><a href="{{ url_for('page_profil')}}">Mon profil ▼</a>
+                    <ul>
+                        <li><a href="{{ url_for('page_profil')}}">Configuration</a></li>
+                        <li><a href="{{ url_for('sign_out')}}">Déconnexion</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <!--Ici j'essaye de sectionner la page en plusieurs zone pour afficher le contenu de façon plus jolie-->
+        <section>
+            <article id="premier_article">
+                <p class=interactifs>Calendrier de mes matchs</p>
+                <div id=datepicker></div>
+            </article>
+            <article id="deuxieme_article">
+                <p class=interactifs>Météo</p>
+                <!-- <object data="{{ url_for('page_meteo')}}" type="text/html" width="400" height="220"></object> -->
+                <!-- <IFRAME src="{{ url_for('page_meteo')}}" width="400" height="220"></IFRAME>  -->
+                <iframe width="400" height="200" style="float:center" src="{{ url_for('page_meteo')}}" frameborder=1 marginwidth = "15px" marginheight="15px" ></iframe>
+            </article>
+            <article>
+                <p class=interactifs>Création d'un match</p>
+                <a href="Organiser_un_match.html"><input type="submit" value="+"></a>
+            </article>
+            <article>
+                <p class=interactifs>Geolocalisation</p>
+                <!-- <IFRAME src="{{ url_for('page_geolocalisation')}}" width="50" height="50"></IFRAME> -->
+                <object  data="{{ url_for('page_geolocalisation')}}"   width="900" height="800"></object>
+
+            </article>
+        </section>
+
+        <footer>
+            <p><a href="mailto: footevent@footevent.com">Nous contacter</a></p>
+        </footer>
+
+            <script src="https://code.jquery.com/jquery-1.7.1.js"></script>
+            <script src="https://code.jquery.com/ui/1.7.1/jquery-ui.js"></script>
             <script>
-            $( function() {
-              $( "#datepicker" ).datepicker();
-            } );
+
+                let dates = '{{date|tojson|safe}}'
+                let jsonDates = JSON.parse(dates)
+                var donnees = Object.values(jsonDates);
+                console.log(dates)
+            
+                function unavailable(date) {
+                var string = jQuery.datepicker.formatDate('yy-mm-dd', date);
+                    if (donnees.indexOf(string) == -1) {
+                        return [true, "ui-state-highlight"];
+                    } else {
+                        return [false, "ui-state-highlight", "event"];
+                    }
+                }
+
+                $(function() {
+                    $("#datepicker").datepicker({
+                        dateFormat: 'yy MM dd',
+                        beforeShowDay: unavailable
+                    });
+
+                });
+
             </script>
-            } );
-            </script>
-        </body>
-    </Html>
+    </body>
+
+</Html>
