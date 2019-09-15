@@ -13,101 +13,22 @@ from mailjet_rest import Client
 import os
 import cgi
 import cgitb; cgitb.enable()
-import json
-import datetime
-import datetime 
+import json 
 #import datetime, date, time
-
-
 
 # On créé une conexion MySQL avec le connecteur MySQLdb
 connection = MySQLdb.connect(host='127.0.0.1', port=3306, user='root', passwd='', db='db_application_event_sportif')
-
 # On créé un curseur MySQL
 cursor = connection.cursor()
 
 
 app = Flask(__name__)
 app.secret_key = b'Iletaitunefoisuneloutreviolette'
-
 app.config['TRAP_BAD_REQUEST_ERRORS'] = True
-
 app.config.update(
     DEBUG=True,
-    SECRET_KEY='secret_xxx',
+    SECRET_KEY=app.secret_key,
 )
-
-
-
-# Fonction qui permet d'envoyer un mail suite à l'inscription de l'utilisateur
-# Utilisation de l'API JetMail
-def envoi_mail_inscription(email,prenom):
-    
-    #définir les API_KEY
-    api_key = '3c7d767dbc11a8a4b0b53962cd823d23'
-    api_secret = '7761428aea9ca5e3e6cab1419c89389b'
-
-
-    mailjet = Client(auth=(api_key, api_secret), version='v3.1')
-    data = {
-        'Messages': [
-        {
-        "From": {
-            "Email": "bouhaza.sofiane@gmail.com",
-            "Name": "Sofiane"
-        },
-        "To": [
-            {
-            "Email": email,
-            "Name": prenom
-            }
-        ],
-        "Subject": "Test Application FootEvent",
-        "TextPart": "Bonjour "+prenom+" , merci de votre inscription. Nous comptons sur vous pour améliorer notre applications. cordialement. ",
-       
-
-        }
-
-    ]
-    }
-    result = mailjet.send.create(data=data)
-    # print(result.status_code)
-    # print(result.json())
-
-#Fonction qui permet d'envoyer le lien lorsque l'utilisateur a oublié son mot de passe
-def envoi_mail_reset_mdp(email):
-    
-    #définir les API_KEY
-    api_key = '3c7d767dbc11a8a4b0b53962cd823d23'
-    api_secret = '7761428aea9ca5e3e6cab1419c89389b'
-    
-    
-    mailjet = Client(auth=(api_key, api_secret), version='v3.1')
-    data = {
-        'Messages': [
-        {
-        "From": {
-            "Email": "bouhaza.sofiane@gmail.com",
-            "Name": "Sofiane"
-        },
-        "To": [
-            {
-            "Email": email,
-            "Name": " "
-            }
-        ],
-        "Subject": "Test Application FootEvent",
-        "HTMLPart": "<h3>Bonjour, Veuillez réinitialiser votre mot de passe en cliquant sur le lien suivant <a href='http://127.0.0.1:5000/mdp_reset'>Mot_de_passe</a>!</h3><br /> Merci, en vous souhaitant une bonne journée"
-
-    
-        }
-
-    ]
-    }
-    result = mailjet.send.create(data=data)
-    # print(result.status_code)
-    # print(result.json())
-
 
 @app.route('/page_principale')
 def page_principale():
@@ -152,11 +73,6 @@ def page_profil():
 @app.route('/page_invitation_match')
 def page_invitation_match():
     return render_template('Invitation_match.html')
-
-
-
-
-
 
     
 #Vue pour la création d'un utilisateur
@@ -465,17 +381,6 @@ def liste_event():
         heureee = heuree[29:34]
         heure_event = str(datetime.timedelta(seconds=int(heureee)))
 
-    
-        
-        
-        
-        
-        #timestampStr = date.strftime("%d-%b-%Y (%H:%M:%S)")
-        #date_event = datetime.strptime(str(date), "%Y-%d-%m").strftime("%d/%m/%Y")
- 
-
-        #liste_date = [i for sub in date_event for i in sub]
-        # On affiche la page html avec la liste des stades en paramètre
         return redirect(url_for('consulter_event', select_event=select_event, date = date_event, heure = heure_event))
 
 @app.route("/consulter_event", methods=["GET", "POST"])
@@ -488,19 +393,7 @@ def consulter_event():
         #messages = session['messages']  
         dates = request.args['date']
         heures = request.args['heure']
-
-        # req_date_consulter_event  = "SELECT id_event FROM events WHERE name_ev = '%s' "
-        #  # On exécute la requête SQL
-        # cursor.execute(req_date_consulter_event % messages)
-        #  # On récupère toutes les lignes du résultat de la requête
-        # #resultat_req_date_consulter_event = cursor.fetchall()
-        #  # on convertit la requete sql en liste
-        # #liste_req = list(resultat_req_consulter_event)
-        # datee = cursor.execute(req_date_consulter_event % messages)
-
-        #timestampStr = datee.strftime('%m/%d/%Y')
         
-
         # On affiche la page html avec la liste des stades en paramètre
         return render_template('Modifier.html', nom_event = messages, date=dates, heure=heures)
 
@@ -519,10 +412,6 @@ def configuration():
             date = str(list_tested)
 
             return render_template('Page_profil.html', pseudo = date, mail=mail)
-
-
-
-
 
 
 if __name__ == '__main__':
