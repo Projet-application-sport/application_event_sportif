@@ -45,10 +45,24 @@
                         <input type="text" id="Departement_id" ><br><br>
                         <label for="Terrain">Choix du terrain</label>
                         <input type="text" name="terrain" id="Terrain" ><br><br>
-                        <label for="friend" required="required">Ajouter des participants</label>
+                         <label>Choix du terrain:
+                            <select name="event_select">
+                                <option value="{{stade}}">{{stade}}</option>
+                                {% for each in list_tested %}
+                                <option value="{{each}}">{{each}}</option>
+                                {% endfor %}
+                            </select>  
+                        <label>Participants:
+                            <ul name="event_select">
+                                {% for each in participants %}
+                                <li value="{{each}}">{{each}}</li>
+                                {% endfor %}
+                            </ul>
+                        </label><br><br>
+<!--                         <label for="friend" required="required">Ajouter des participants</label>
                         <input id="addfriend" type ="button" value = "+" onclick="openModal()"><br><br>
                         <label for="supfriend" >Supprimer des participants</label>
-                        <input id="supfriend" type ="button" value = "-" onclick="openwindow()"><br><br> 
+                        <input id="supfriend" type ="button" value = "-" onclick="openwindow()"><br><br>  -->
                         
                     </fieldset>
                     <input class="button" type ="submit" value = "Valider"><br>
