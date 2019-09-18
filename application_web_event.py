@@ -462,6 +462,55 @@ def liste_event():
         else:
             flash("Vous n'avez pas l'autorisation de modifier cet événement", "error")
             return redirect('/liste_event')
+
+@app.route("/modifier_event", methods=["GET", "POST"])
+def modifier_event():
+
+    # Si on souhaite récupérer la page web
+    if request.method == "GET":
+    
+        messages = request.args['select_event'] 
+        dates = request.args['date']
+        heures = request.args['heure']
+        stade = request.args['stade']
+
+        req_id_event = "SELECT id_event FROM events WHERE name_ev='%s'"
+        cursor.execute(req_id_event % messages)
+        ff = cursor.fetchone()[0]
+        print(ff)
+        req_participants = " SELECT u.pseudo FROM users as u JOIN participant as p ON p.id_userA=u.id_user JOIN events as e ON e.id_event=p.id_eventA WHERE p.id_eventA=%s"
+        cursor.execute(req_participants % ff)
+        result_req_participants = cursor.fetchall()
+        list_participants = [i for sub in result_req_participants for i in sub]
+        print(list_participants)
+
+        req_stade = "SELECT Nom_du_stade FROM stade"
+        cursor.execute(req_stade)
+        resultat_req_stades = cursor.fetchall()
+        list_tested = [i for sub in resultat_req_stades for i in sub] 
+
+        # On affiche la page html avec la liste des stades en paramètre
+        return render_template('Modifier.html', nom_event = messages, date=dates, heure=heures, stade=stade, participants=list_participants, list_tested=list_tested)
+    
+    if request.method == "POST":
+
+        # name_ev= request.form["nom_event"]
+        name_ev = session['select_event']
+        date  = request.form["date"]
+        heure = request.form["heure"]
+        stade = request.form["event_select"]
+
+        req_id_event = "SELECT id_stade FROM stade WHERE Nom_du_stade='%s'"
+        cursor.execute(req_id_event % stade)
+        ff = cursor.fetchone()[0]
+ 
+
+        req_update_mdp_client = "UPDATE events SET date_ev= %s, hour_ev= %s, id_stadeA=%s WHERE name_ev= %s"
+        cursor.execute(req_update_mdp_client, (date, heure, ff, name_ev))
+        connection.commit()
+
+    return redirect('/liste_event')
+
         
 @app.route("/consulter_event", methods=["GET", "POST"])
 def consulter_event():
@@ -485,6 +534,8 @@ def consulter_event():
 
         # On affiche la page html avec la liste des stades en paramètre
         return render_template('Modifier.html', nom_event = messages, date=dates, heure=heures, stade=stade)
+  
+
 
 
 @app.route("/configuration", methods=["GET", "POST"])
