@@ -40,7 +40,30 @@ app.config.update(
 
 @app.route('/page_principale')
 def page_principale():
-    return render_template('Page_principale.html')
+      if request.method == "GET":
+
+        req_stade = "SELECT * FROM events"
+        cursor.execute(req_stade)
+        resultat_req_stades = cursor.fetchall()
+
+        mail = session.get('pseudo_user')
+        req_id= "SELECT id_user FROM users WHERE email='%s'"
+        cursor.execute(req_id % mail)
+        result_req_id = cursor.fetchone()[0]
+        print(result_req_id)
+        
+        req_participants = " SELECT u.date_ev FROM events as u JOIN participant as p ON p.id_eventA=u.id_event JOIN users as e ON e.id_user=p.id_userA WHERE p.id_userA=%s"
+        cursor.execute(req_participants % result_req_id)
+        result_req_participants = cursor.fetchall()
+        list_participants = [i for sub in result_req_participants for i in sub]
+        print(list_participants)
+
+        datee = []
+        for row in resultat_req_stades:
+            date = row[2]
+            datee.append(datetime.strptime(str(date), '%Y-%m-%d').strftime('%Y-%m-%d'))
+
+    return render_template('Page_principale.html', date=datee)
 
 @app.route('/page_organiser_un_match')
 def page_organiser_un_match():
