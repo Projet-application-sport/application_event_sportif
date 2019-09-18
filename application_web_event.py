@@ -514,15 +514,14 @@ def modifier_event():
         
 @app.route("/consulter_event", methods=["GET", "POST"])
 def consulter_event():
-
-    # Si on souhaite récupérer la page web
+# Si on souhaite récupérer la page web
     if request.method == "GET":
-        
-        messages = request.args['select_event'] 
-        dates = request.args['date']
-        heures = request.args['heure']
-        stade = request.args['stade']
-        
+    
+        messages = session['select_event']
+        dates = session['date_event']
+        heures =  session['heure_event']
+        stade = session['stade']
+
         req_id_event = "SELECT id_event FROM events WHERE name_ev='%s'"
         cursor.execute(req_id_event % messages)
         ff = cursor.fetchone()[0]
@@ -530,14 +529,13 @@ def consulter_event():
 
         req_participants = " SELECT u.pseudo FROM users as u JOIN participant as p ON p.id_userA=u.id_user JOIN events as e ON e.id_event=p.id_eventA WHERE p.id_eventA=%s"
         cursor.execute(req_participants % ff)
-        print(cursor.fetchall())
+        result_req_participants = cursor.fetchall()
+        list_participants = [i for sub in result_req_participants for i in sub]
+        print(list_participants)
 
         # On affiche la page html avec la liste des stades en paramètre
-        return render_template('Modifier.html', nom_event = messages, date=dates, heure=heures, stade=stade)
+        return render_template('consulter_match.html', nom_event = messages, date=dates, heure=heures, stade=stade, participants=list_participants)
   
-
-
-
 @app.route("/configuration", methods=["GET", "POST"])
 def configuration():
 
