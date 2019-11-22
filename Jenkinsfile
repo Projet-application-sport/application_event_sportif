@@ -1,14 +1,14 @@
-pipeline{
+pipeline {
 agent any
-stages{
+stages {
  stage('build'){
-  step{
-   sh '/home/sana/maven3/bin/mvn clean install'
+  steps{
+  sh '/home/sana/maven3/bin/mvn clean install'
   }
  }
  stage('test'){
-  step{
-   sh '/home/sana/maven3/bin/mvn test'
+  steps{
+  sh '/home/sana/maven3/bin/mvn test'
   }
  }
 }
